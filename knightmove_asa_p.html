@@ -1,0 +1,126 @@
+<html>
+
+<head>
+  <meta charset="UTF-8">
+</head>
+<style>
+  .black {
+    background-color: rgb(75, 83, 82);
+    width: 50px;
+    height: 50px;
+  }
+
+  .white {
+    background-color: rgb(241, 239, 213);
+    width: 50px;
+    height: 50px;
+  }
+</style>
+
+<body></body>
+<script>
+//This is the function you need to write in the console log.
+//0-based
+//getValidMoves(currentX, currentY)
+
+
+  // max values for x and y, 0-based to work with array index
+  var xMax = 7;
+  var yMax = 7;
+
+  //constuctor for x and y coordinates
+  function Position(xCoordinate, yCoordinate) {
+    this.x = xCoordinate;
+    this.y = yCoordinate;
+  }
+
+  //constructor
+  function ChessLocation(letter, number) {
+    this.letter = letter;
+    this.number = number;
+  }
+
+  // convert coordinates to chessboard coordinates
+  function getChessLocation(xCoordinate, yCoordinate) {
+
+    var number = yCoordinate + 1;
+
+    function convert(xCoordinate) {
+      if (xCoordinate == 0) return 'A';
+      if (xCoordinate == 1) return 'B';
+      if (xCoordinate == 2) return 'C';
+      if (xCoordinate == 3) return 'D';
+      if (xCoordinate == 4) return 'E';
+      if (xCoordinate == 5) return 'F';
+      if (xCoordinate == 6) return 'G';
+      if (xCoordinate == 7) return 'H';
+    };
+    var letter=convert(xCoordinate);
+
+    var chessboardPosition = new ChessLocation(letter, number);
+
+    return chessboardPosition;
+  }
+
+
+  //This is the function you need to write in the console log.
+  function getValidMoves(currentX, currentY) {
+
+    // 8 different moves that the knigth can go.
+    var possibleMoves = [new Position(2, 1), new Position(2, -1), new Position(1, 2), new Position(1, -2),
+      new Position(-1, -2), new Position(-1, 2), new Position(-2, 1), new Position(-2, -1)
+    ];
+
+    var validChessCoordinates = [];
+
+    //Check each possible move to see if it is valid.
+    for (var i = 0; i < possibleMoves.length; i++) {
+      var move = possibleMoves[i];
+      var newX = move.x + currentX;
+      var newY = move.y + currentY;
+
+      //If new X position is larger than max value, or less than 0 it is invalid
+      if (newX > xMax || newX < 0) {
+        continue;
+      }
+
+      //If new Y position is larger than max value, or less than 0 it is invalid
+      if (newY > yMax || newY < 0) {
+        continue;
+      }
+
+      var chessLocation = getChessLocation(newX, newY);
+
+      console.log('Can move to ' + chessLocation.letter + chessLocation.number);
+
+      //pushing in moves in validCoordinates to later return that.
+      validChessCoordinates.push(chessLocation);
+    }
+
+    return validChessCoordinates;
+
+  }
+
+
+
+  //paint a chesstable
+  var table = document.createElement("table");
+  for (var i = 1; i < 9; i++) {
+    var tr = document.createElement('tr');
+    for (var j = 1; j < 9; j++) {
+      var td = document.createElement('td');
+      //make odd o even color on chessboard
+      if (i % 2 == j % 2) {
+        td.className = "white";
+      } else {
+        td.className = "black";
+      }
+      tr.appendChild(td);
+    }
+    table.appendChild(tr);
+  }
+  //printing the table
+  document.body.appendChild(table);
+</script>
+
+</html>
