@@ -4,6 +4,15 @@
   <meta charset="UTF-8">
 </head>
 <style>
+  input {
+  width: 60px;
+  padding: 2px;
+}
+button {
+  width: 130px;
+  height: 30px;
+  padding: 2px;
+}
   .black {
     background-color: rgb(75, 83, 82);
     width: 50px;
@@ -14,15 +23,54 @@
     background-color: rgb(241, 239, 213);
     width: 50px;
     height: 50px;
-  }
+    }
 </style>
 
-<body></body>
+<body>
+  <div id="chess"></div>
+  <div>
+    <h4>Write in the knigths chessboard position to get all possible moves.</h4>
+    <form id="chessmatt">
+      from A-H :<input type="text" name="xinput">
+      from 1-8: <input type="number" min="1" max="8" name="yinput">
+      <button id="submit">Calculate Moves</button>
+      <div id="output"> </div>
+  </div>
+  </form>
+</body>
 <script>
-//This is the function you need to write in the console log.
-//0-based
-//getValidMoves(currentX, currentY)
+  var currentX;
+  var currentY;
+  var xinput;
+  var yinput;
 
+  document.getElementById("submit").addEventListener("click", function() {
+    document.getElementById("output").innerHTML = convertInput();
+    //call the function convert.
+
+    xinput = document.getElementById("xinput");
+    yinput = document.getElementById("yinput");
+    console.log(xinput);
+  });
+
+    function convertInput(xinput, yinput) {
+    xinput.toUpperCase(xinput);
+    xinput.charCodeAt(0) - 65; //make the input letter to a number between 0-7.
+    currentX=xinput;
+    currentY=yinput-1;
+
+    nyChessFunction(currentX, currentY);
+    }
+
+  function nyChessFunction(currentX, currentY) {
+    if (currentX > 0 && currentX < 7) {
+    //call the function that calculate.
+      return getValidMoves(currentX, currentY);
+
+    } else {
+      return alert("false write a letter between a - H")
+    }
+  }
 
   // max values for x and y, 0-based to work with array index
   var xMax = 7;
@@ -44,26 +92,20 @@
   function getChessLocation(xCoordinate, yCoordinate) {
 
     var number = yCoordinate + 1;
+    var answerX="";
 
+   //transform the coordinate to a letter.
     function convert(xCoordinate) {
-      if (xCoordinate == 0) return 'A';
-      if (xCoordinate == 1) return 'B';
-      if (xCoordinate == 2) return 'C';
-      if (xCoordinate == 3) return 'D';
-      if (xCoordinate == 4) return 'E';
-      if (xCoordinate == 5) return 'F';
-      if (xCoordinate == 6) return 'G';
-      if (xCoordinate == 7) return 'H';
-    };
-    var letter=convert(xCoordinate);
+      answerX = (String.fromCharCode(xCoordinate + 65));
+      return answerX;
+      };
 
+    var letter = convert(xCoordinate);
     var chessboardPosition = new ChessLocation(letter, number);
-
     return chessboardPosition;
   }
 
 
-  //This is the function you need to write in the console log.
   function getValidMoves(currentX, currentY) {
 
     // 8 different moves that the knigth can go.
@@ -97,6 +139,7 @@
       validChessCoordinates.push(chessLocation);
     }
 
+    document.getElementById("output").innerHTML=validChessCoordinates;
     return validChessCoordinates;
 
   }
