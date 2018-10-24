@@ -30,13 +30,13 @@ button {
   <div id="chess"></div>
   <div>
     <h4>Write in the knigths chessboard position to get all possible moves.</h4>
-    <form id="chessmatt">
-      from A-H :<input type="text" name="xinput">
-      from 1-8: <input type="number" min="1" max="8" name="yinput">
-      <button id="submit">Calculate Moves</button>
-      <div id="output"> </div>
+    <div id="chessmatt">
+      from A-H :<input type="text" id="xinput">
+      from 1-8: <input type="number" min="1" max="8" id="yinput">
+      <button onclick="calculateinput()" >Calculate Moves</button><br><br>
+      <p id="output"> </p>
+    </div>
   </div>
-  </form>
 </body>
 <script>
   var currentX;
@@ -44,31 +44,27 @@ button {
   var xinput;
   var yinput;
 
-  document.getElementById("submit").addEventListener("click", function() {
-    document.getElementById("output").innerHTML = convertInput();
-    //call the function convert.
+  function calculateinput() {
 
-    xinput = document.getElementById("xinput");
-    yinput = document.getElementById("yinput");
-    console.log(xinput);
-  });
+    xinput = document.getElementById("xinput").value;
+    yinput = document.getElementById("yinput").value;
 
-    function convertInput(xinput, yinput) {
-    xinput.toUpperCase(xinput);
-    xinput.charCodeAt(0) - 65; //make the input letter to a number between 0-7.
-    currentX=xinput;
-    currentY=yinput-1;
+    xinput = xinput.toUpperCase(xinput);
+    xinput = xinput.charCodeAt(0) - 65; //make the input letter to a number between 0-7.
+    currentX = xinput;
+    currentY = yinput - 1;
 
+ //call the function that calculate after that we convertet it to coordinates
     nyChessFunction(currentX, currentY);
-    }
+  }
 
   function nyChessFunction(currentX, currentY) {
-    if (currentX > 0 && currentX < 7) {
-    //call the function that calculate.
-      return getValidMoves(currentX, currentY);
+    if (currentX >= 0 && currentX <= 7) {
+      //call the function that calculate.
+      console.log(getValidMoves(currentX, currentY));
 
     } else {
-      return alert("false write a letter between a - H")
+      alert("false write a letter between a - H")
     }
   }
 
@@ -92,20 +88,20 @@ button {
   function getChessLocation(xCoordinate, yCoordinate) {
 
     var number = yCoordinate + 1;
-    var answerX="";
+    var answerX = "";
 
-   //transform the coordinate to a letter.
+    //transform the coordinate to a letter.
     function convert(xCoordinate) {
       answerX = (String.fromCharCode(xCoordinate + 65));
       return answerX;
-      };
+    };
 
     var letter = convert(xCoordinate);
     var chessboardPosition = new ChessLocation(letter, number);
     return chessboardPosition;
   }
 
-
+    //the function that do all the work
   function getValidMoves(currentX, currentY) {
 
     // 8 different moves that the knigth can go.
@@ -137,9 +133,18 @@ button {
 
       //pushing in moves in validCoordinates to later return that.
       validChessCoordinates.push(chessLocation);
+
     }
 
-    document.getElementById("output").innerHTML=validChessCoordinates;
+    validChessCoordinates.forEach(function(value, index, array) {
+        var cdiv = document.createElement("div");
+        cdiv.classList.add("answ");
+        cdiv.id = index;
+        output.appendChild(cdiv);
+        var write= `<p>${value.letter}${value.number}</p>`;
+        document.getElementById(cdiv.id).innerHTML = write;
+    });
+
     return validChessCoordinates;
 
   }
